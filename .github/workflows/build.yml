@@ -74,7 +74,7 @@ jobs:
       - name: Pasang dependensi npm
         run: npm ci
 
-      # Dijalankan saat push tag: membuat/memperbarui draft rilis di GitHub
+      # Dijalankan saat push tag: langsung membuat rilis (published) di GitHub
       - name: Build & rilis (tag)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: tauri-apps/tauri-action@v0
@@ -84,7 +84,7 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: "Ngaji ${{ github.ref_name }}"
           releaseBody: "Lihat CHANGELOG.md untuk daftar perubahan. Unduh installer sesuai sistem operasi di bawah."
-          releaseDraft: true
+          releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}
 
