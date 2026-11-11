@@ -8,46 +8,108 @@ html.has-tb #titlebar {
   left: 0 !important;
 }
 
-/* Window control buttons (minimize / maximize / close) */
+/* Window control buttons (minimize / maximize / close) — ukuran caption Windows */
 #tauri-win-controls {
   display: flex;
   align-items: stretch;
   gap: 0;
-  padding: 0 6px;
+  padding: 0;
+  height: 100%;
   flex: 0 0 auto;
+  -webkit-app-region: no-drag;
 }
 #tauri-win-controls button {
-  type: button;
-  border: 0;
-  background: transparent;
-  color: var(--on2, #fff);
-  font: 500 13px/1 var(--ui, inherit);
-  cursor: pointer;
-  border-radius: 6px;
-  margin: 4px 0;
-  padding: 0 10px;
-  transition: background 0.18s var(--ease, ease), color 0.18s var(--ease, ease);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 34px;
-  height: var(--tb, 34px);
-  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 46px;
+  min-width: 46px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--on, #fff);
+  cursor: default;
   -webkit-app-region: no-drag;
+  transition: background-color 0.12s linear, color 0.12s linear;
+}
+#tauri-win-controls button svg {
+  display: block;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
 }
 #tauri-win-controls button:hover {
-  background: var(--f2, rgba(255,255,255,0.1));
+  background: var(--f2, rgba(255,255,255,0.08));
   color: var(--on, #fff);
 }
 #tauri-win-controls button:active {
-  background: var(--f3, rgba(255,255,255,0.2));
+  background: var(--f3, rgba(255,255,255,0.14));
+}
+#tauri-win-controls button:focus-visible {
+  outline: 2px solid var(--primary, #4c8dff);
+  outline-offset: -2px;
 }
 #tauri-win-controls .win-close:hover {
-  background: #c42b2b !important;
-  color: #fff !important;
+  background: #c42b1c;
+  color: #fff;
 }
 #tauri-win-controls .win-close:active {
-  background: #a82424 !important;
+  background: #b0261a;
+  color: #fff;
+}
+
+/* macOS: traffic lights (tutup / minimize / layar penuh) di kiri, bulat 12 px */
+#tauri-win-controls.mac {
+  align-items: center;
+  padding: 0 0 0 20px;
+  gap: 8px;
+  height: 100%;
+}
+#tauri-win-controls.mac button {
+  width: 12px;
+  min-width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  color: rgba(0, 0, 0, 0.55);
+  background: #d4d4d4;
+}
+#tauri-win-controls.mac button svg {
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  transition: opacity 0.1s linear;
+}
+/* Simbol muncul saat kursor berada di area ketiga tombol (perilaku Big Sur+) */
+#tauri-win-controls.mac:hover button svg {
+  opacity: 1;
+}
+#tauri-win-controls.mac .win-close,
+#tauri-win-controls.mac .win-close:hover {
+  background: #ff5f57;
+}
+#tauri-win-controls.mac .win-min,
+#tauri-win-controls.mac .win-min:hover {
+  background: #febc2e;
+}
+#tauri-win-controls.mac .win-max,
+#tauri-win-controls.mac .win-max:hover {
+  background: #28c840;
+}
+#tauri-win-controls.mac button:focus-visible {
+  outline: 2px solid var(--primary, #4c8dff);
+  outline-offset: 2px;
+}
+/* Jendela tidak aktif: semua tombol abu-abu, simbol disembunyikan */
+html.win-inactive #tauri-win-controls.mac button {
+  background: #d4d4d4;
+  color: rgba(0, 0, 0, 0.35);
+}
+html.win-inactive #tauri-win-controls.mac:hover button svg {
+  opacity: 0;
 }
 
 /* Drag region for the titlebar (moves the window) */

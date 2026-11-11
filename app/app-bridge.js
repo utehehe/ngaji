@@ -276,18 +276,85 @@
       });
       document.addEventListener('ngaji-lang', function () { closePanel(); btns.forEach(function (x) { x.textContent = T(x.dataset.l); }); });
       bar.appendChild(menus);
-      // Tauri window controls (minimize / maximize / close)
+      // Tombol jendela mengikuti OS: macOS = traffic lights di kiri, Windows = caption di kanan.
+      var isMac = /Mac/.test(navigator.platform || '') || /Mac OS X|Macintosh/.test(navigator.userAgent || '');
+      var drag = document.createElement('div'); drag.className = 'tb-drag';
       var wc = document.createElement('div'); wc.id = 'tauri-win-controls';
-      var mkBtn = function (cls, title, action) {
-        var b = document.createElement('button'); b.type = 'button'; b.className = cls; b.title = title;
+      if (isMac) wc.classList.add('mac');
+      var ICON = {
+        min: '<path d="M0.5 5h9" fill="none" stroke="currentColor" stroke-width="1"/>',
+        max: '<rect x="0.5" y="0.5" width="9" height="9" rx="1" fill="none" stroke="currentColor" stroke-width="1"/>',
+        restore: '<path d="M2.5 0.5h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-1M1.5 2.5h5a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1"/>',
+        close: '<path d="M0.5 0.5l9 9M9.5 0.5l-9 9" fill="none" stroke="currentColor" stroke-width="1"/>'
+      };
+      var ICON_MAC = {
+        min: '<path d="M1 4h6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>',
+        // Panah keluar-menjorok ke sudut: segitiga kanan-atas + kiri-bawah (masuk layar penuh).
+        max: '<path d="M4.5 0.5h3v3zM3.5 7.5h-3v-3z" fill="currentColor"/>',
+        // Kebalikannya: kiri-atas + kanan-bawah (keluar layar penuh).
+        restore: '<path d="M0.5 0.5h3v3zM7.5 7.5h-3v-3z" fill="currentColor"/>',
+        close: '<path d="M1.2 1.2l5.6 5.6M6.8 1.2l-5.6 5.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>'
+      };
+      var GLYPH = isMac ? ICON_MAC : ICON;
+      var mkBtn = function (cls, label, action, icon) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = cls;
+        b.title = label; b.setAttribute('aria-label', label);
+        b.innerHTML = isMac
+          ? '<svg viewBox="0 0 8 8" width="8" height="8" aria-hidden="true" focusable="false">' + icon + '</svg>'
+          : '<svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true" focusable="false">' + icon + '</svg>';
         b.addEventListener('click', function () { if (api[action]) api[action](); });
         return b;
       };
-      wc.appendChild(mkBtn('win-min', 'Minimalkan', 'minimize'));
-      wc.appendChild(mkBtn('win-max', 'Perbesar', 'maximize'));
-      wc.appendChild(mkBtn('win-close', 'Tutup', 'close'));
-      bar.appendChild(wc);
-      bar.appendChild(document.createElement('div')).className = 'tb-drag';
+      var bMin = mkBtn('win-min', 'Minimalkan', 'minimize', ICON.min);
+      var bMax = isMac
+        ? mkBtn('win-max', 'Layar Penuh', 'toggleFullscreen', ICON_MAC.max)
+        : mkBtn('win-max', 'Perbesar', 'maximize', ICON.max);
+      var bClose = mkBtn('win-close', 'Tutup', 'close', ICON.close);
+      if (isMac) {
+        // Urutan native macOS: tutup (merah), minimize (kuning), layar penuh (hijau) — di kiri.
+        wc.appendChild(bClose); wc.appendChild(bMin); wc.appendChild(bMax);
+        bar.insertBefore(wc, menus);
+        bar.appendChild(drag);
+      } else {
+        wc.appendChild(bMin); wc.appendChild(bMax); wc.appendChild(bClose);
+        bar.appendChild(drag);
+        bar.appendChild(wc);
+      }
+      // Ikon tombol berganti mengikuti keadaan jendela sebenarnya
+      // (klik tombol, snap, Win+↑, atau dobel-klik bilah judul).
+      // macOS: tombol hijau = layar penuh native (bukan zoom), jadi state-nya fullscreen.
+      var setMax = function (isMax) {
+        var svg = bMax.querySelector('svg');
+        if (svg) svg.innerHTML = isMax ? GLYPH.restore : GLYPH.max;
+        var label = isMac
+          ? (isMax ? 'Keluar Layar Penuh' : 'Layar Penuh')
+          : (isMax ? 'Pulihkan' : 'Perbesar');
+        bMax.title = label; bMax.setAttribute('aria-label', label);
+        if (isMac) bMax.classList.toggle('is-fullscreen', !!isMax);
+        else bMax.classList.toggle('is-max', !!isMax);
+      };
+      var syncMax = null;
+      if (window.__TAURI__ && window.__TAURI__.window && window.__TAURI__.window.getCurrentWindow) {
+        var tw = window.__TAURI__.window.getCurrentWindow();
+        syncMax = function () {
+          var state = isMac && tw.isFullscreen ? tw.isFullscreen() : tw.isMaximized();
+          state.then(setMax).catch(function () {});
+        };
+        syncMax();
+        try {
+          if (tw.onResized) {
+            var evt = tw.onResized(syncMax);
+            if (evt && evt.catch) evt.catch(function () {});
+          }
+        } catch (e) { /* tanpa izin event: ikon tetap diperbarui lewat klik */ }
+      }
+      bMax.addEventListener('click', function () { if (syncMax) setTimeout(syncMax, isMac ? 120 : 60); });
+      // macOS: traffic lights meredup saat jendela tidak aktif, seperti aslinya.
+      if (isMac) {
+        var setActive = function (on) { root.classList.toggle('win-inactive', !on); };
+        window.addEventListener('focus', function () { setActive(true); });
+        window.addEventListener('blur', function () { setActive(false); });
+      }
       root.appendChild(bar);
       root.classList.add('has-tb');
       var setH = function (zoom) { root.style.setProperty('--tb', (info.h / (zoom || 1)).toFixed(2) + 'px'); };

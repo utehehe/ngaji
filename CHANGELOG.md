@@ -32,6 +32,7 @@ Versi aplikasi saat ini: **1.0.0**. Rilis ini mencakup fitur mute suara klik, pe
 - `.gitignore` menambah `src-tauri/target`.
 
 ### Ditambahkan
+- **Bilah judul mengikuti sistem operasi.** Windows memakai tombol caption 46×33 px (minimize / maximize-restore / close, hover close merah) di kanan; macOS memakai traffic lights 12 px di kiri, simbol muncul saat hover, dan meredup saat jendela tidak aktif. Tombol hijau macOS membuka **layar penuh native** (`toggle_fullscreen`), bukan zoom, dengan label dan ikon yang berganti mengikuti keadaan jendela.
 - Kaidah Nahwu bab 6 (*Fi'il & Jazm/Nashab*) dilengkapi dari 10 menjadi 31 kaidah: pembagian fi'il, bina' madhi/amr, i'rab mudhari', af'al khamsah, nawashib, jawazim, adawat syarat, jawab syarat, af'al qulub, ta'liq/ilgha', lazim/muta'addi, af'al muqarabah, madh/dzamm, ta'ajjub, majhul, mu'tal, mudha'af, asma' af'al, nahi, dan latihan i'rab.
 - Aksi menu yang sebelumnya tak berefek kini tersambung: Proyek Baru, Buka, Simpan, Simpan Sebagai, Impor Data, Ekspor JSON, Reset Data, Buka Folder Data / Font, Muat Ulang, Zoom (± / asli), Alat Pengembang, Periksa Pembaruan, Tentang.
 - Menu *Edit*: Potong, Salin, Tempel, Pilih Semua.
