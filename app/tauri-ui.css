@@ -1,0 +1,65 @@
+/* Tauri custom titlebar / window-control overrides.
+   Loaded after styles.css so it can override the default titlebar rules. */
+
+/* Make the custom titlebar span the full window width (no native overlay reserve) */
+html.has-tb #titlebar {
+  right: auto !important;
+  width: 100% !important;
+  left: 0 !important;
+}
+
+/* Window control buttons (minimize / maximize / close) */
+#tauri-win-controls {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 0 6px;
+  flex: 0 0 auto;
+}
+#tauri-win-controls button {
+  type: button;
+  border: 0;
+  background: transparent;
+  color: var(--on2, #fff);
+  font: 500 13px/1 var(--ui, inherit);
+  cursor: pointer;
+  border-radius: 6px;
+  margin: 4px 0;
+  padding: 0 10px;
+  transition: background 0.18s var(--ease, ease), color 0.18s var(--ease, ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: var(--tb, 34px);
+  box-sizing: border-box;
+  -webkit-app-region: no-drag;
+}
+#tauri-win-controls button:hover {
+  background: var(--f2, rgba(255,255,255,0.1));
+  color: var(--on, #fff);
+}
+#tauri-win-controls button:active {
+  background: var(--f3, rgba(255,255,255,0.2));
+}
+#tauri-win-controls .win-close:hover {
+  background: #c42b2b !important;
+  color: #fff !important;
+}
+#tauri-win-controls .win-close:active {
+  background: #a82424 !important;
+}
+
+/* Drag region for the titlebar (moves the window) */
+#tauri-drag-region {
+  -webkit-app-region: drag;
+  flex: 1;
+}
+
+/* Ensure titlebar buttons don't drag */
+#tauri-win-controls, #tauri-win-controls button, #titlebar .tb-menus, #titlebar .tb-menus button {
+  -webkit-app-region: no-drag;
+}
+
+/* Hide default window controls when custom titlebar is active */
+html.has-tb #titlebar + * { margin-top: 0; }

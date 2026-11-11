@@ -1,0 +1,112 @@
+name: Build Ngaji (Windows, macOS, Linux)
+
+on:
+  # Rilis otomatis: push tag, contoh -> git tag v1.0.0 && git push origin v1.0.0
+  push:
+    tags:
+      - "v*"
+  # Atau jalankan manual dari tab Actions (hasil build jadi artifact, bukan rilis)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build ${{ matrix.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux (x64)
+            os: ubuntu-22.04
+            args: ""
+          - name: Windows (x64)
+            os: windows-latest
+            args: ""
+          - name: macOS (Apple Silicon)
+            os: macos-latest
+            args: "--target aarch64-apple-darwin"
+            rust_targets: aarch64-apple-darwin
+          - name: macOS (Intel)
+            os: macos-15-intel
+            args: "--target x86_64-apple-darwin"
+            rust_targets: x86_64-apple-darwin
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Pasang dependensi sistem (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            libssl-dev \
+            libxdo-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust_targets }}
+
+      - name: Cache Rust
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+          key: ${{ matrix.os }}-${{ matrix.args }}
+
+      - name: Pasang dependensi npm
+        run: npm ci
+
+      # Dijalankan saat push tag: membuat/memperbarui draft rilis di GitHub
+      - name: Build & rilis (tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Ngaji ${{ github.ref_name }}"
+          releaseBody: "Lihat CHANGELOG.md untuk daftar perubahan. Unduh installer sesuai sistem operasi di bawah."
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
+
+      # Dijalankan saat manual: hanya build lalu simpan sebagai artifact
+      - name: Build (manual)
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: ${{ matrix.args }}
+
+      - name: Unggah artifact (manual)
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ngaji-${{ runner.os }}-${{ runner.arch }}
+          if-no-files-found: error
+          path: |
+            src-tauri/target/release/bundle/**/*.exe
+            src-tauri/target/release/bundle/**/*.msi
+            src-tauri/target/release/bundle/**/*.deb
+            src-tauri/target/release/bundle/**/*.rpm
+            src-tauri/target/release/bundle/**/*.AppImage
+            src-tauri/target/*/release/bundle/**/*.dmg

@@ -1,0 +1,25 @@
+KITAB BAWAAN & JENIS KITAB
+==========================
+
+Di jendela "Mau Ngaji Apa Hari Ini?" kitab dikelompokkan per JENIS (Fiqih, Hadis, Tafsir, Akidah, Akhlak,
+Tasawuf, Nahwu, Sharaf, dst.). Pilih jenisnya di barisan di atas rak.
+
+CARA MEMASUKKAN KITAB (untuk pengguna)
+- Pilih jenis, lalu klik "Tambah ke <jenis>" dan pilih file .ngaji (boleh banyak sekaligus). Selesai.
+- Atau klik "Buka Folder", lalu taruh file .ngaji ke folder jenis itu, buka ulang jendela pilih kitab (Ctrl+K).
+- Folder pengguna ada di folder data aplikasi (<userData>/kitab/<Jenis>/). Folder baru dengan nama bebas
+  (mis. "Usul Fiqih") otomatis menjadi jenis baru.
+
+KITAB BAWAAN (untuk pembuat aplikasi)
+- Taruh file .ngaji di folder ini, di dalam sub-folder jenisnya:  kitab/Fiqih/Safinatun Najah.ngaji
+- Nama file = judul yang tampil. Folder ikut dibundel saat membuat installer (resources/kitab); setelah menambah
+  file, buat installer ulang. Mode pengembangan (npm start) membaca folder ini langsung.
+- File di akar folder (tanpa sub-folder) memakai baris  "jenis": "Fiqih",  di dalam file .ngaji, atau file
+  jenis.json di folder ini: { "Nama.ngaji": "Fiqih" }. Tanpa keduanya masuk "Lainnya".
+- "Rukun Islam (contoh).ngaji" hanya contoh; hapus bila tidak diperlukan.
+
+MENGHAPUS & MEMINDAH KITAB
+- Di jendela pilih kitab, pilih kartu kitabnya lalu klik "Pindah" (pilih jenis tujuan, atau ketik nama jenis baru) atau "Hapus" (ada konfirmasi, file dihapus permanen).
+- Berlaku juga untuk kitab di folder kitab/ bawaan, selama folder itu bisa ditulis (mode pengembangan). Pada aplikasi terpasang di folder yang hanya-baca (mis. Program Files), kitab bawaan tidak bisa dipindah / dihapus dan muncul pesan galat.
+
+Kitab dibuka sebagai SALINAN. Bila diubah, "Simpan" menanyakan lokasi baru, sehingga file asli tidak tertimpa.

@@ -1,0 +1,152 @@
+/* Data Ngaji (bawaan).
+   Boleh diedit manual; pastikan isinya tetap objek JavaScript yang valid. */
+window.NGAJI_DATA = {
+ "title": "Ngaji",
+ "settings": {},
+ "pages": [
+  {
+   "id": "p1",
+   "title": "Rukun Islam",
+   "sentences": [
+    {
+     "id": "p1-s1",
+     "words": [
+      {
+       "id": "p1-s1-w1",
+       "arab": "أَرْكَانُ",
+       "pegon": "رُكُنْ",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      },
+      {
+       "id": "p1-s1-w2",
+       "arab": "الإِسْلَامِ",
+       "pegon": "اِسْلَامْ",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      },
+      {
+       "id": "p1-s1-w3",
+       "arab": "خَمْسَةٌ",
+       "pegon": "ليما",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      }
+     ],
+     "keterangan_kalimat": {
+      "catatan": ""
+     }
+    },
+    {
+     "id": "p1-s2",
+     "words": [
+      {
+       "id": "p1-s2-w1",
+       "arab": "اَلصَّلَاةُ",
+       "pegon": "صلاة",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      },
+      {
+       "id": "p1-s2-w2",
+       "arab": "لَهَا",
+       "pegon": "كَرَيَا",
+       "dhomir_target_id": "p1-s2-w1",
+       "dhomir_letters": [
+        1,
+        2
+       ],
+       "dhomir_target_ids": [
+        "p1-s2-w1"
+       ]
+      },
+      {
+       "id": "p1-s2-w3",
+       "arab": "شُرُوطٌ",
+       "pegon": "شرط-شرط",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      }
+     ],
+     "keterangan_kalimat": {
+      "catatan": "Contoh: dhomir hanya pada huruf ها, marju'-nya الصلاة. (Contoh data.)"
+     }
+    },
+    {
+     "id": "p1-s3",
+     "words": [
+      {
+       "id": "p1-s3-w1",
+       "arab": "اَلصَّلَاةُ",
+       "pegon": "صلاة",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      },
+      {
+       "id": "p1-s3-w2",
+       "arab": "وَالصِّيَامُ",
+       "pegon": "ڤواسا",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      },
+      {
+       "id": "p1-s3-w3",
+       "arab": "لَهُمَا",
+       "pegon": "كَدُوَنْيَا",
+       "dhomir_letters": [
+        1,
+        2,
+        3
+       ],
+       "dhomir_target_ids": [
+        "p1-s3-w1",
+        "p1-s3-w2"
+       ],
+       "dhomir_target_id": "p1-s3-w1"
+      },
+      {
+       "id": "p1-s3-w4",
+       "arab": "شُرُوطٌ",
+       "pegon": "شرط-شرط",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      }
+     ],
+     "keterangan_kalimat": {
+      "catatan": "Contoh: dhomir هما merujuk ke dua kata sekaligus (الصلاة dan الصيام). (Contoh data.)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "p2",
+   "title": "Bab 2 (contoh kosong)",
+   "sentences": [
+    {
+     "id": "p2-s1",
+     "words": [
+      {
+       "id": "p2-s1-w1",
+       "arab": "فَصْلٌ",
+       "pegon": "",
+       "dhomir_target_id": null,
+       "dhomir_target_ids": [],
+       "dhomir_letters": []
+      }
+     ],
+     "keterangan_kalimat": {
+      "catatan": ""
+     }
+    }
+   ]
+  }
+ ]
+};

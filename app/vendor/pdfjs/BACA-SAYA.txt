@@ -1,0 +1,2 @@
+PDF.js (Mozilla) v6.2.108 — Apache License 2.0 (lihat LICENSE). Dipakai oleh pembaca PDF (app/pdf-reader.js).
+pdf.min.mjs + pdf.worker.min.mjs = pustaka; wasm/ = dekoder gambar JPX/JBIG2; standard_fonts/ = font cadangan PDF.

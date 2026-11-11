@@ -1,0 +1,11 @@
+Folder font bawaan aplikasi (dibundel ke dalam installer).
+
+Isi yang ikut terpaket (semua berlisensi SIL Open Font License 1.1, lihat LICENSES.md):
+  Amiri, Noto Naskh Arabic, Scheherazade New
+
+Font BERLISENSI MILIK PIHAK LAIN tidak boleh dibundel. Contoh: Arabic Typesetting (Microsoft).
+  - File bernama Arabic* / arabtype* sudah dikecualikan dari installer (package.json) dan dari git (.gitignore).
+  - Untuk memakainya di komputer sendiri: salin ke sini (hanya untuk `npm start`) atau pasang di sistem;
+    di Windows/Office ia terbaca otomatis tanpa menyalin file.
+
+Untuk aplikasi yang sudah dipaketkan, tambah font lewat menu: Berkas -> Buka Folder Font Lokal.
