@@ -1,4 +1,4 @@
-# Ngaji — Tauri + Rust (UI Noor Aurora)
+# Ngaji — Tauri + Rust
 
 Pembaca interaktif Ngaji (bab, sub bab, teks Arab berformat Word): kata Arab dengan tooltip Pegon, garis dhomir → marju', catatan kalimat,
 panel kata yang di-hover (Pegon + dhomir + marju'), Mode Baca & Mode Edit. **Seluruh data disimpan sebagai file JavaScript (`.js`), bukan di HTML.**
